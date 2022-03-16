@@ -13,6 +13,9 @@ export default class User extends BaseModel {
   public secureId: uuidv4
 
   @column()
+  public name: string
+
+  @column()
   public email: string
 
   @column()

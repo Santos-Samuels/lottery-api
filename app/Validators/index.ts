@@ -1,9 +1,13 @@
-import SignupUser from 'App/Validators/SignupUserValidator'
-import SigninUser from 'App/Validators/SigninUserValidator'
-import UpdateUser from 'App/Validators/UpdateUserValidator'
+import SignupUser from './SignupUserValidator'
+import SigninUser from './SigninUserValidator'
+import UpdateUser from './UpdateUserValidator'
+import CreateGame from './CreateGameValidator'
+import UpdateGame from './UpdateGameValidator'
 
 export {
   SignupUser,
   SigninUser,
-  UpdateUser
+  UpdateUser,
+  CreateGame,
+  UpdateGame
 }

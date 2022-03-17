@@ -19,15 +19,16 @@
 */
 
 import Route from '@ioc:Adonis/Core/Route'
-import Database from '@ioc:Adonis/Lucid/Database'
 import 'App/Modules/Auth/routes'
+import 'App/Modules/Game/routes'
+// import Database from '@ioc:Adonis/Lucid/Database'
 
 Route.where('id', {
   match: /^[0-9]+$/,
   cast: (id) => Number(id),
 })
 
-Route.get('/', async () => {
-  // return { hello: 'world' }
-  return Database.from('users').select('*')
-})
+// Route.get('/', async () => {
+//   // return { hello: 'world' }
+//   return Database.from('users').select('*')
+// })

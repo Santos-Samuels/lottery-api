@@ -9,23 +9,26 @@ export default class GamesController {
   }
 
   public async store({ request }: HttpContextContract) {
-    const game = request.only(['type', 'description', 'range', 'price', 'max_number', 'color'])
+    const data = request.only(['type', 'description', 'range', 'price', 'max_number', 'color'])
     await request.validate(CreateGame)
-    await Game.create(game)
+    const game = await Game.create(data)
 
     return game
   }
 
-  public async update({request}: HttpContextContract) {
-    const { gameId } = request.params()
+  public async show({ request }: HttpContextContract) {
+    const { id } = request.params()
+    const game = Game.findByOrFail('id', id)
+
+    return game
+  }
+
+  public async update({ request }: HttpContextContract) {
+    const { id } = request.params()
     const updated = request.only(['type', 'description', 'range', 'price', 'max_number', 'color'])
     await request.validate(UpdateGame)
 
-    const game = await Game.findBy('id', gameId)
-
-    if (!game) {
-      return 'Game not found'
-    }
+    const game = await Game.findByOrFail('id', id)
 
     game.merge(updated)
     await game.save()
@@ -34,12 +37,8 @@ export default class GamesController {
   }
 
   public async destroy({ request }: HttpContextContract) {
-    const { gameId } = request.params()
-    const game = await Game.findBy('id', gameId)
-
-    if (!game) {
-      return 'Game not found'
-    }
+    const { id } = request.params()
+    const game = await Game.findByOrFail('id', id)
 
     await game.delete()
 

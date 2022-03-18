@@ -28,7 +28,7 @@ export default class GameValidator {
     description: schema.string(),
     range: schema.number(),
     price: schema.number(),
-    maxNumber: schema.number(),
+    max_number: schema.number(),
     color: schema.string(),
   })
 

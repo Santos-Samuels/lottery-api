@@ -28,7 +28,7 @@ export default class UpdateGameValidator {
     description: schema.string.optional(),
     range: schema.number.optional(),
     price: schema.number.optional(),
-    maxNumber: schema.number.optional(),
+    max_number: schema.number.optional(),
     color: schema.string.optional(),
   })
 

@@ -1,6 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import User from 'App/Models/User'
-import { formatUser } from 'App/services/formatUser'
 import { SignupUser, SigninUser, UpdateUser } from 'App/Validators'
 
 export default class AuthController {
@@ -14,9 +13,7 @@ export default class AuthController {
         .use('api')
         .attempt(data.email, data.password, { expiresIn: '7days', name: user?.serialize().email })
 
-      const userInfo = formatUser(user!)
-
-      return { token, user: userInfo }
+      return { token, user }
     } catch {
       return response.badRequest('Invalid credentials')
     }
@@ -28,7 +25,7 @@ export default class AuthController {
     const existentUser = await User.findBy('email', data.email)
 
     if (existentUser) {
-      return response.status(400).json({ error: { message: 'Email already exists' } })
+      return response.status(400).json({ error: { message: 'There is already a user with this email' } })
     }
 
     const user = await User.create(data)
@@ -36,31 +33,32 @@ export default class AuthController {
       expiresIn: '7days',
     })
 
-    const userInfo = formatUser(user!)
-
-    return { userInfo, token }
+    return { user, token }
   }
 
   public async show({ auth }: HttpContextContract) {
     const { id } = await auth.use('api').authenticate()
     const user = await User.findBy('id', id)
-    const userInfo = formatUser(user!)
     
-    return { userInfo }
+    return user
   }
 
-  public async update({ auth, request }: HttpContextContract) {
+  public async update({ auth, request, response }: HttpContextContract) {
     const { id } = await auth.use('api').authenticate()
     const user = await User.findBy('id', id)
-
+    
     await request.validate(UpdateUser)
     const data = request.only(['name', 'email', 'password'])
+    const existentUser = await User.findBy('email', data.email)
 
-    await user?.merge(data)
+    if (existentUser) {
+      return response.status(400).json({ error: { message: 'There is already a user with this email' } })
+    }
+
+    user?.merge(data)
     await user?.save()
 
-    const userInfo = formatUser(user!)
-    return userInfo
+    return user
   }
 
   public async destroy({ auth }: HttpContextContract) {

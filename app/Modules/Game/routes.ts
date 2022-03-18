@@ -3,11 +3,11 @@ import Route from '@ioc:Adonis/Core/Route'
 Route.group(() => {
   Route.group(() => {
     Route.group(() => {
-      Route.post('/create', 'GameController.store')
-      Route.put('/update', 'GameController.update')
-      Route.delete('/delete', 'GameController.destroy')
+      Route.post('/create', 'GamesController.store')
+      Route.put('/update', 'GamesController.update')
+      Route.delete('/delete', 'GamesController.destroy')
     }).middleware('auth')
   }).prefix(':id')
 
-  Route.get('/', 'GameController.index')
+  Route.get('/', 'GamesController.index')
 }).prefix('games')

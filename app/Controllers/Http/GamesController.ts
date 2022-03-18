@@ -27,7 +27,7 @@ export default class GamesController {
       return 'Game not found'
     }
 
-    await game.merge(updated)
+    game.merge(updated)
     await game.save()
 
     return game

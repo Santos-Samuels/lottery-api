@@ -65,7 +65,6 @@ export default class AuthController {
     const { id } = await auth.use('api').authenticate()
     const user = await User.findBy('id', id)
     await user?.delete()
-
     return 'User has been deleted'
   }
 }

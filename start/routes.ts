@@ -21,6 +21,7 @@
 import Route from '@ioc:Adonis/Core/Route'
 import 'App/Modules/Auth/routes'
 import 'App/Modules/Game/routes'
+import 'App/Modules/Bet/routes'
 // import Database from '@ioc:Adonis/Lucid/Database'
 
 Route.where('id', {

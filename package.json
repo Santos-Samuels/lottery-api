@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "node ace serve --watch",
     "build": "node ace build --production",
-    "start": "ENV_SILENT=true node server.js",
+    "start": "node server.js",
     "lint": "eslint . --ext=.ts",
     "format": "prettier --write ."
   },
@@ -26,6 +26,7 @@
     "@adonisjs/auth": "^8.0.12",
     "@adonisjs/core": "^5.5.3",
     "@adonisjs/lucid": "^17.1.0",
+    "@adonisjs/mail": "^7.2.5",
     "@adonisjs/repl": "^3.1.9",
     "luxon": "^2.3.1",
     "mysql": "^2.18.1",

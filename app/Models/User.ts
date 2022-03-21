@@ -5,9 +5,12 @@ import {
   beforeSave,
   hasMany,
   HasMany,
+  hasOne,
+  HasOne,
 } from '@ioc:Adonis/Lucid/Orm'
 import Hash from '@ioc:Adonis/Core/Hash'
 import Bet from './Bet'
+import Permission from './Permission'
 
 export default class User extends BaseModel {
   public static table = 'users'
@@ -16,6 +19,9 @@ export default class User extends BaseModel {
     foreignKey: 'user_id',
   })
   public bets: HasMany<typeof Bet>
+
+  @hasOne(() => Permission)
+  public permission: HasOne<typeof Permission>
 
   @column({ isPrimary: true })
   public id: number

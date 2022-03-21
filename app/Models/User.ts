@@ -4,13 +4,10 @@ import {
   column,
   beforeSave,
   hasMany,
-  HasMany,
-  hasOne,
-  HasOne,
+  HasMany
 } from '@ioc:Adonis/Lucid/Orm'
 import Hash from '@ioc:Adonis/Core/Hash'
 import Bet from './Bet'
-import Permission from './Permission'
 
 export default class User extends BaseModel {
   public static table = 'users'
@@ -19,9 +16,6 @@ export default class User extends BaseModel {
     foreignKey: 'user_id',
   })
   public bets: HasMany<typeof Bet>
-
-  @hasOne(() => Permission)
-  public permission: HasOne<typeof Permission>
 
   @column({ isPrimary: true })
   public id: number
@@ -34,6 +28,9 @@ export default class User extends BaseModel {
 
   @column({ serializeAs: null })
   public password: string
+  
+  @column()
+  public permissionId: number
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

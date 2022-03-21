@@ -2,7 +2,6 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Bet from 'App/Models/Bet'
 import Cart from 'App/Models/Cart'
 import Game from 'App/Models/Game'
-import { formatNewBet } from 'App/services/formatNewBet'
 
 export interface choosen {
   choosen_numbers: number[]
@@ -36,6 +35,14 @@ export default class BetsController {
     for (let i = 0; i < data.games.length; i++) {
       const gameRule = await Game.findByOrFail('id', data.games[i].game_id)
       
+      if (data.games[i].choosen_numbers.length > gameRule.maxNumber || data.games[i].choosen_numbers.length < gameRule.maxNumber) {
+        return response.status(400).json({
+          error: {
+            menssage: `This ${gameRule.type} only allows ${gameRule.maxNumber} numbers choosen`,
+          },
+        })
+      }
+
       newBets.push({
         game_id: data.games[i].game_id,
         choosen_numbers: data.games[i].choosen_numbers.toLocaleString(),
@@ -55,12 +62,7 @@ export default class BetsController {
     }
 
     await Bet.createMany(newBets)
+    
     return newBets
   }
-
-  public async show({}: HttpContextContract) {}
-
-  public async update({}: HttpContextContract) {}
-
-  public async destroy({}: HttpContextContract) {}
 }

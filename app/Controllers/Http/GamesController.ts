@@ -11,24 +11,25 @@ export default class GamesController {
   public async store({ request }: HttpContextContract) {
     const data = request.only(['type', 'description', 'range', 'price', 'max_number', 'color'])
     await request.validate(CreateGame)
+
     const game = await Game.create(data)
 
     return game
   }
 
   public async show({ request }: HttpContextContract) {
-    const { id } = request.params()
-    const game = Game.findByOrFail('id', id)
+    const { game_id } = request.params()
+    const game = Game.findByOrFail('id', game_id)
 
     return game
   }
 
   public async update({ request }: HttpContextContract) {
-    const { id } = request.params()
+    const { game_id } = request.params()
     const updated = request.only(['type', 'description', 'range', 'price', 'max_number', 'color'])
     await request.validate(UpdateGame)
 
-    const game = await Game.findByOrFail('id', id)
+    const game = await Game.findByOrFail('id', game_id)
 
     game.merge(updated)
     await game.save()
@@ -37,8 +38,8 @@ export default class GamesController {
   }
 
   public async destroy({ request }: HttpContextContract) {
-    const { id } = request.params()
-    const game = await Game.findByOrFail('id', id)
+    const { game_id } = request.params()
+    const game = await Game.findByOrFail('id', game_id)
 
     await game.delete()
 

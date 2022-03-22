@@ -1,0 +1,8 @@
+<h1>Hey, {{ username }}</h1>
+
+<p>You made new bets, thanks you and good lucky!</p>
+
+<p><b>Your bets: </b></p>
+@each(bet in bets)
+ <li>{{bet.type}}: {{bet.choosen_numbers}} </li>
+@end

@@ -43,13 +43,13 @@ export default class BetsController {
     for (let i = 0; i < data.games.length; i++) {
       const gameRule = await Game.findByOrFail('id', data.games[i].game_id)
       
-      // if (data.games[i].choosen_numbers.length > gameRule.maxNumber || data.games[i].choosen_numbers.length < gameRule.maxNumber) {
-      //   return response.status(400).json({
-      //     error: {
-      //       menssage: `This ${gameRule.type} only allows ${gameRule.maxNumber} numbers choosen`,
-      //     },
-      //   })
-      // }
+      if (data.games[i].choosen_numbers.length > gameRule.maxNumber || data.games[i].choosen_numbers.length < gameRule.maxNumber) {
+        return response.status(400).json({
+          error: {
+            menssage: `This ${gameRule.type} only allows ${gameRule.maxNumber} numbers choosen`,
+          },
+        })
+      }
 
       newBets.push({
         game_id: data.games[i].game_id,

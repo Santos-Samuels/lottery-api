@@ -1,8 +1,10 @@
 import Mail from '@ioc:Adonis/Addons/Mail'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import Bet from 'App/Models/Bet'
 import Permission from 'App/Models/Permission'
 import User from 'App/Models/User'
 import { SignupUser, SigninUser, UpdateUser } from 'App/Validators'
+import { DateTime } from 'luxon'
 
 export default class AuthController {
   public async index({ auth, request, response }: HttpContextContract) {
@@ -51,9 +53,13 @@ export default class AuthController {
 
   public async show({ auth }: HttpContextContract) {
     const { id } = await auth.use('api').authenticate()
-    const user = await User.findBy('id', id)
+    const user = await User.findOrFail(id)
+    const recents_bets = await Bet.query()
+      .select('*')
+      .where('created_at', '<=', DateTime.now().toSQL())
+      .where('created_at', '>', DateTime.now().minus({ days: 30 }).startOf('day').toSQL())
 
-    return user
+    return {user, recents_bets}
   }
 
   public async update({ auth, request, response }: HttpContextContract) {

@@ -4,6 +4,7 @@ import Bet from 'App/Models/Bet'
 import Cart from 'App/Models/Cart'
 import Game from 'App/Models/Game'
 import User from 'App/Models/User'
+import { BetValidator } from 'App/Validators'
 
 export interface choosen {
   choosen_numbers: number[]
@@ -32,18 +33,18 @@ export default class BetsController {
   }
 
   public async store({ auth, request, response }: HttpContextContract) {
+    const { games } = await request.validate(BetValidator)
     const { id } = await auth.use('api').authenticate()
     const user = await User.findByOrFail('id', id)
-    const data: { games: choosen[] } = request.only(['games'])
     const cart = await Cart.query().select('min_cart_value').first()
 
     const newBets: IBetsToSave[] = []
     let totalAmount: number = 0
 
-    for (let i = 0; i < data.games.length; i++) {
-      const gameRule = await Game.findByOrFail('id', data.games[i].game_id)
+    for (let i = 0; i < games.length; i++) {
+      const gameRule = await Game.findByOrFail('id', games[i].game_id)
       
-      if (data.games[i].choosen_numbers.length > gameRule.maxNumber || data.games[i].choosen_numbers.length < gameRule.maxNumber) {
+      if (games[i].choosen_numbers.length > gameRule.maxNumber || games[i].choosen_numbers.length < gameRule.maxNumber) {
         return response.status(400).json({
           error: {
             menssage: `This ${gameRule.type} only allows ${gameRule.maxNumber} numbers choosen`,
@@ -52,8 +53,8 @@ export default class BetsController {
       }
 
       newBets.push({
-        game_id: data.games[i].game_id,
-        choosen_numbers: data.games[i].choosen_numbers.toLocaleString(),
+        game_id: games[i].game_id,
+        choosen_numbers: games[i].choosen_numbers.toLocaleString(),
         price: gameRule.price,
         user_id: id,
       })
@@ -71,13 +72,13 @@ export default class BetsController {
 
     const betsToEmail: BetsToEmail[] = []
 
-    for (let i = 0; i < data.games.length; i++) {
-      const gameRule = await Game.findByOrFail('id', data.games[i].game_id)
+    for (let i = 0; i < games.length; i++) {
+      const gameRule = await Game.findByOrFail('id', games[i].game_id)
 
       betsToEmail.push(
         {
           type: gameRule.type,
-          choosen_numbers: data.games[i].choosen_numbers.toLocaleString()
+          choosen_numbers: games[i].choosen_numbers.toLocaleString()
         }
       )
     }

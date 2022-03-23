@@ -22,14 +22,9 @@ import Route from '@ioc:Adonis/Core/Route'
 import 'App/Modules/Auth/routes'
 import 'App/Modules/Game/routes'
 import 'App/Modules/Bet/routes'
-// import Database from '@ioc:Adonis/Lucid/Database'
+import 'App/Modules/ResetPassword/routes'
 
 Route.where('id', {
   match: /^[0-9]+$/,
   cast: (id) => Number(id),
 })
-
-// Route.get('/', async () => {
-//   // return { hello: 'world' }
-//   return Database.from('users').select('*')
-// })

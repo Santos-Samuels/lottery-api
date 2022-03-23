@@ -24,7 +24,8 @@ export default class PasswordValidator {
    *    ```
    */
   public schema = schema.create({
-    password: schema.string({}, [rules.required()])
+    password: schema.string({}, [rules.required()]),
+    token: schema.string({}, [rules.required()])
   })
 
   /**
